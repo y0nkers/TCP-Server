@@ -12,7 +12,7 @@
 class TcpListener;
 
 // Callback to data received
-typedef void (*MessageReceivedHandler)(TcpListener* listener, int socketId, std::string msg);
+typedef void (*MessageReceivedHandler)(TcpListener* listener, SOCKET socketId, std::string msg);
 
 class TcpListener {
 public:
@@ -20,7 +20,7 @@ public:
 	TcpListener(std::string ipAddress, int port, MessageReceivedHandler handler);
 	~TcpListener();
 
-	void sendMessage(int clientSocket, std::string message);
+	void sendMessage(SOCKET clientSocket, std::string message);
 	bool init();
 	void run();
 	void cleanup();

@@ -1,6 +1,6 @@
 #include "TcpListener.hpp"
 
-void listenerMessageReceived(TcpListener* listener, int client, std::string message) {
+void listenerMessageReceived(TcpListener* listener, SOCKET client, std::string message) {
 	listener->sendMessage(client, message);
 }
 

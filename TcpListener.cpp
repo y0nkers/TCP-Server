@@ -7,8 +7,8 @@ TcpListener::~TcpListener() {
 }
 
 // Send a message to the specified client
-void TcpListener::sendMessage(int clientSocket, std::string message) {
-	send(clientSocket, message.c_str(), message.size() + 1, 0);
+void TcpListener::sendMessage(SOCKET clientSocket, std::string message) {
+	send(clientSocket, message.c_str(), (int)message.size() + 1, 0);
 }
 
 // Initialize winsocket
@@ -19,7 +19,7 @@ bool TcpListener::init() {
 	int wsInit = WSAStartup(ver, &data);
 	if (wsInit != 0) {
 		std::cerr << "Cant initialize winsock! Quitting" << std::endl;
-		return -1;
+		return false;
 	}
 	return wsInit == 0;
 }
@@ -27,6 +27,8 @@ bool TcpListener::init() {
 // Main processing loop
 void TcpListener::run() {
 	char buffer[MAX_BUFFER_SIZE];
+
+	std::cout << "Waiting for connection..." << std::endl;
 
 	while (true) {
 		SOCKET listening = createSocket();
@@ -42,11 +44,17 @@ void TcpListener::run() {
 			do {
 				memset(buffer, 0, MAX_BUFFER_SIZE);
 				bytesReceived = recv(client, buffer, MAX_BUFFER_SIZE, 0);
-				if (bytesReceived > 0) {
-					if (m_messageReceivedHandler != NULL) {
-						m_messageReceivedHandler(this, client, std::string(buffer, 0, bytesReceived));
-					}
+				if (bytesReceived == 0 || bytesReceived == -1) {
+					std::cout << "Client disconnected. Waiting for connection..." << std::endl;
+					break;
 				}
+
+				std::cout << "Client: " << std::string(buffer, 0, bytesReceived) << std::endl;
+
+				if (m_messageReceivedHandler != NULL) {
+					m_messageReceivedHandler(this, client, std::string(buffer, 0, bytesReceived));
+				}
+
 			} while (bytesReceived > 0);
 
 			closesocket(client);
