@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <string>
+#include <sstream>
 
 #include <WS2tcpip.h>
 #pragma comment (lib, "ws2_32.lib")
@@ -23,7 +24,8 @@ public:
 
 	void sendMessage(SOCKET clientSocket, std::string message);
 	bool init();
-	void run();
+	void runSingle();
+	void runMultiple();
 	void cleanup();
 
 private:

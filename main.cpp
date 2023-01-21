@@ -15,7 +15,7 @@ int main(int argc, char* argv[]) {
 	TcpListener server("127.0.0.1", 56789, listenerMessageReceived);
 
 	if (server.init()) {
-		server.run();
+		server.runMultiple();
 	}
 
 	system("pause");
