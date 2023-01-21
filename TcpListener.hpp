@@ -14,6 +14,7 @@ class TcpListener;
 // Callback to data received
 typedef void (*MessageReceivedHandler)(TcpListener* listener, SOCKET socketId, std::string msg);
 
+// TcpListener class
 class TcpListener {
 public:
 

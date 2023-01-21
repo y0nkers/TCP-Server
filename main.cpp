@@ -1,7 +1,13 @@
 #include "TcpListener.hpp"
+#include "QotD.hpp"
+#include <algorithm>
+
+QotD quotes("quotes.txt");
 
 void listenerMessageReceived(TcpListener* listener, SOCKET client, std::string message) {
-	listener->sendMessage(client, message);
+	std::transform(message.begin(), message.end(), message.begin(), ::tolower);
+	if (message == "quote") listener->sendMessage(client, quotes.getRandomQuote());
+	else listener->sendMessage(client, message);
 }
 
 int main(int argc, char* argv[]) {
@@ -12,5 +18,6 @@ int main(int argc, char* argv[]) {
 		server.run();
 	}
 
+	system("pause");
 	return 0;
 }
